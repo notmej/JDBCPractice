@@ -1,2 +1,2 @@
 # JDBCPractice
-JDBC practice 
+JDBC practice tasks are stores here. 
