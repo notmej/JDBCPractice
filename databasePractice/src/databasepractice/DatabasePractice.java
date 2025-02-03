@@ -15,6 +15,7 @@ import java.util.Scanner;
  * This is a java program that shows the user all the rows in a MySql table 'coffee' from the DB 'newDB'
  * Then it prompts the user to enter anew entry o insert a new set of values to the table
  * After that it prints out the new table with a 'succesfully Added' message after showing the appended table.
+ * Also, if the entrance is wrong and doesn't fit SQL rules, error is outputted and the user s asked to reenter 
  */
 public class DatabasePractice {
 
