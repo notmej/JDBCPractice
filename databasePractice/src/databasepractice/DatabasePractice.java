@@ -17,6 +17,13 @@ import java.util.Scanner;
  * After that it prints out the new table with a 'succesfully Added' message after showing the appended table.
  * Also, if the entrance is wrong and doesn't fit SQL rules, error is outputted and the user s asked to reenter 
  */
+
+/**
+ * 
+ * @author yuna
+ * latest edit notice: changed the insertion part to be a method
+ */
+
 public class DatabasePractice {
 
     //Global variable initialization
@@ -65,6 +72,33 @@ public class DatabasePractice {
         
     }
     
+    //Ask user to reinput values/ new values to input reccursivly
+    public static void newInput(Scanner in){
+        String newInp = "y";
+        int count = 0;
+        while(newInp.equals("y")){
+            try {
+                System.out.print("ID: ");
+                int uInpID = in.nextInt();
+                System.out.print("Roast: ");
+                String uInpRoast = in.next();
+                
+                String insertStmt = "INSERT INTO coffee (id, roast) values(" + uInpID + ", '" + uInpRoast + "');";
+                stmt.execute(insertStmt);
+                System.out.println("INSERTED SUCCESSFULLY!\n----------------------------------------------------------------------");
+                System.out.print("Would you like to add new input? (type[Y]es or [N]o (or any other key): ");
+                newInp = in.next();
+                count++;
+                
+            } catch (SQLException e) {
+                System.out.println("ERROR, CANT ADD TO DB: " + e.getMessage());
+                System.out.print("Would you like to add new input? (type[Y]es or [N]o (or any other key): ");
+                newInp = in.next();
+            }
+        }
+        System.out.println("\nTHANK YOU, YOUR INPUTS WILL BE SAVED!");
+    }
+    
     public static void main(String[] args) throws SQLException{
         //Scanner initialization
         Scanner in = new Scanner(System.in);
@@ -89,46 +123,26 @@ public class DatabasePractice {
         boolean addedToTable = isInsertIntoTable(uInpID, uInpRoast);
         
         
-        // Sucess / failure message / ask for new input
-        System.out.println("----------------------------------------------------------------------\n");
+        
+        // Sucess / failure message SIMPLE!! + ask if want to reinput/new input
+        System.out.println("\n---------------------------------------------------------------------------");
         if(addedToTable){
-            System.out.println("----ADDED TO TABLE SUCCESSFULLY!----\n");
-            System.out.println("UPDATED TABLE:");
-            tableOutput();
-            
-        } else {
-            System.out.println("----ERROR: CNT ADD TO TABLE----\n");
-            System.out.println("UPDATED TABLE:");
-            tableOutput();
-            
-            //asks if user would liek to reenter
-            System.out.println("If you'd like to ReEnter, please enter 'y' and if you'd like to exit, press any other key:");
-            String newValEnt = in.next();
-            
-            while(newValEnt.toLowerCase().equals("y")){
-                System.out.print("ID: ");
-                uInpID = in.nextInt();
-                
-                System.out.print("Roast: ");
-                uInpRoast = in.next();
-                
-                addedToTable = isInsertIntoTable(uInpID, uInpRoast);
-                if(addedToTable){
-                    System.out.println("----ADDED TO TABLE SUCCESSFULLY!----\n");
-                    System.out.println("UPDATED TABLE:");
-                    
-                    tableOutput();
-                    
-                    System.out.println("If you'd like to Enter a new value, please enter 'y' and if you'd like to exit, press any other key:");
-                    newValEnt = in.next();
-
-                } else {
-                    
-                    System.out.println("If you'd like to ReEnter, please enter 'y' and if you'd like to exit, press any other key:");
-                    newValEnt = in.next();
-
-                }
+            System.out.println("ADDED TO TABLE SUCCESFULLY");
+            System.out.print("Would you like to add new input? (type[Y]es or [N]o (or any other key):");
+            if(in.next().toLowerCase().equals("y")){
+                newInput(in);
+            }
+        } else{
+            System.out.println("FAILED TO ADD TO TABLE");
+            System.out.print("Would you like to add new input? (type[Y]es or [N]o (or any other key):");
+            if(in.next().toLowerCase().equals("y")){
+                newInput(in);
             }
         }
+        
+        //print final values
+        System.out.println("\n----------------------------------------------------------------------\nFINAL VALUES AFTER APPPENDED DATABSE BY USER\n----------------------------------------------------------------------");
+        tableOutput();
+        System.out.println("----------------------------------------------------------------------");
     } 
 }
